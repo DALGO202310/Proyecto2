@@ -81,8 +81,8 @@ public class ProblemaP2 {
      * @param a vertice a
      * @param b vertice b
      * @return boolean que indica si es redundante 
-     * P1= ¿Hay camino de a-b con 1?
-     * P2= ¿Hay camino de a-b con 2?
+     * p1= ¿Hay camino de a-b con 1?
+     * p2= ¿Hay camino de a-b con 2?
      */
     public boolean esRedundantePorVertice (ArrayList<ArrayList<int[]>> adyacencias, int a, int b){
         boolean p1= hayCamino(adyacencias, a, b, 1);
