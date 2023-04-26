@@ -42,8 +42,36 @@ public class ProblemaP2 {
         return adyacencias;
     }
 
-    public boolean hayCamino (ArrayList<ArrayList<int[]>> adyacencias, int a, int w,int k){
-        
+    /**
+     * funcion para determinar si hay conexión de a hacia b con tipo de conexión k
+     * @param adyacencias lista de adyacencias
+     * @param a vertice fuente
+     * @param b vertice destino
+     * @param k tipo de conexión
+     * @return boolean 
+     */
+    public boolean hayCamino (ArrayList<ArrayList<int[]>> adyacencias, int a, int b,int k){
+        ArrayList<Integer> cola= new ArrayList<>();
+        ArrayList<Integer> result= new ArrayList<>();
+        //se debee arreglar la resta del 1 en la funcion principal
+        cola.add(a);
+        int n=a;
+        ArrayList <int []> list;
+        while (cola.size()>0){
+            n=cola.get(0);
+            cola.remove(0);
+            result.add(n);
+            list= adyacencias.get(n);
+            for (int i=0; i<list.size();i++){
+                int[] v= list.get(i);
+                if (!cola.contains(v[0]) && !result.contains(v[0]) && v[1]==k){
+                    cola.add(v[0]);
+                    if (v[0]==b){
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
