@@ -75,8 +75,23 @@ public class ProblemaP2 {
         return false;
     }
 
+    /**
+     * funcion para determinar si la conexión entre a y b es redundante
+     * @param adyacencias lista de adyacencias
+     * @param a vertice a
+     * @param b vertice b
+     * @return boolean que indica si es redundante 
+     * P1= ¿Hay camino de a-b con 1?
+     * P2= ¿Hay camino de a-b con 2?
+     */
+    public boolean esRedundantePorVertice (ArrayList<ArrayList<int[]>> adyacencias, int a, int b){
+        boolean p1= hayCamino(adyacencias, a, b, 1);
+        boolean p2= hayCamino(adyacencias, a, b, 2);
+        return ((p1 && p2)|(!p1 && !p2));
+    }
+
     public boolean esRedundante (ArrayList<ArrayList<int[]>> adyacencias){
-        
+
         return false;
     }
 
