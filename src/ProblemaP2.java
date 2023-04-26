@@ -75,4 +75,9 @@ public class ProblemaP2 {
         return false;
     }
 
+    public boolean esRedundante (ArrayList<ArrayList<int[]>> adyacencias){
+        
+        return false;
+    }
+
 }
