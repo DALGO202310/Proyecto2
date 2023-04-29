@@ -1,8 +1,44 @@
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * @author Juan Andres Jaramillo P.
+ * @author Daniela Camacho.
+ * @author Yann Chové.
+ */
+
 public class ProblemaP2 {
+
+    public static void main(String[] args) throws Exception{
+        ProblemaP2 instancia= new ProblemaP2();
+        try ( 
+			InputStreamReader is= new InputStreamReader(System.in);
+			BufferedReader br = new BufferedReader(is);
+		){
+            String line = br.readLine();
+			int casos = Integer.parseInt(line);
+			line = br.readLine();
+            for(int i=0;i<casos && line!=null && line.length()>0; i++){
+                String [] especificacion= line.split(" ");
+                int n= Integer.parseInt(especificacion[0]);
+                int m= Integer.parseInt(especificacion[1]);
+                ArrayList<ArrayList<int[]>> adyacencias= instancia.inicLista(n);
+                int [][] m= instancia.inicMatriz(n);
+                ArrayList<Integer> rta= new ArrayList<>();
+                line=br.readLine();
+                for (int j=0; j<=m ;j++){
+                    String [] conexion=line.split(" ");
+                    int v1= Integer.parseInt(conexion[0])-1;
+                    int v2= Integer.parseInt(conexion[1])-1;
+                    int k= Integer.parseInt(conexion[3]);
+                    adyacencias= instancia.agregarConexion(adyacencias, v1, v2, k);
+                    rta.add(instancia.esRedundante(adyacencias, m));
+                }
+            }
+        }
+    }
     
     /**
      * funcion para inicializar la lista de adyacencias
@@ -12,11 +48,32 @@ public class ProblemaP2 {
     public ArrayList<ArrayList<int[]>> inicLista (int vertices){
         ArrayList<ArrayList<int []>> adyacencias= new ArrayList<>();
         ArrayList<int[]> list;
-        for (int i=0; i<vertices; i++){
+        for (int i=0; i<=vertices; i++){
             list= new ArrayList<>();
             adyacencias.add(list);
         }
         return adyacencias;
+    }
+
+    /**
+     * funcion para inicializar la matriz donde se especifica el tipo de conexion
+     * 0 -> hay conexión con un solo cable (1 o 2)
+     * 1 -> hay conexión con los dos cables (1 y 2)
+     * 2 -> no hay ninguna conexión 
+     * @param vertices numero de computadores
+     * @return matriz inicializada
+     */
+    public int[][] inicMatriz (int vertices){
+        new int[][] m= new int [vertices][vertices];
+        for (int i=0;i<=vertices;i++){
+            for (int j=0; j<=vertices;j++){
+                if (i==j){
+                    m[i][j]=null;
+                }else{
+                    m[i][j]=2;
+                }
+            }
+        }
     }
 
     /**
@@ -30,22 +87,13 @@ public class ProblemaP2 {
     public ArrayList<ArrayList<int[]>> agregarConexion (ArrayList<ArrayList<int[]>> adyacencias, int i, int j, int k){
         //agregar adyacencia para el eje i
         int [] tuple = new int[2];
-
-        tuple[0]=j-1;
+        tuple[0]=j;
         tuple[1]=k;
-        adyacencias.get(i-1).add(tuple);
-
-        // ArrayList<int []> list=adyacencias.get(i-1);
-        // list.add(tuple);
-        // adyacencias.add(i-1, list);//ESTA LINEA ES PROBLEMATICA, LEER LO QUE HACE EL METODO ADD(INT INDEX, OBJECT)
+        adyacencias.get(i).add(i, tuple);
 
         //agregar adyacencia para el eje j
-        tuple[0]=i-1;
-        adyacencias.get(j-1).add(tuple);
-
-        // list= adyacencias.get(j-1);
-        // list.add(tuple);
-        // adyacencias.add(j-1, list);//ESTA LINEA ES PROBLEMATICA, LEER LO QUE HACE EL METODO ADD(INT INDEX, OBJECT)
+        tuple[0]=i;
+        adyacencias.get(j).add(j, tuple);
 
         return adyacencias;
     }
@@ -91,15 +139,35 @@ public class ProblemaP2 {
      * p1= ¿Hay camino de a-b con 1?
      * p2= ¿Hay camino de a-b con 2?
      */
-    public boolean esRedundantePorVertice (ArrayList<ArrayList<int[]>> adyacencias, int a, int b){
+    public int esRedundantePorVertice (ArrayList<ArrayList<int[]>> adyacencias, int a, int b){
         boolean p1= hayCamino(adyacencias, a, b, 1);
         boolean p2= hayCamino(adyacencias, a, b, 2);
-        return ((p1 && p2)|(!p1 && !p2)); //para que esta operacion? si (p1 && p2) es true entonces ya se sabe que es redundante porque existe un camino por ambos cables...
+        if (p1 && p2){
+            return 1
+        }else if (!p1 && !p2){
+            return 2
+        }else{
+            return 0;
+        }
     }
 
-    public boolean esRedundante (ArrayList<ArrayList<int[]>> adyacencias){
+    public boolean esRedundante (ArrayList<ArrayList<int[]>> adyacencias, int [][] m){
+        for (int i=0; i<adyacencias.size();i++){
+            for (int j=0; j<adyacencias.size();j++){
+                if (m[i][j]!=1 && i!=j){
+                    int c= esRedundantePorVertice(adyacencias, i, j);
+                    m[i][j]=c;
+                    if (c==0){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 
-        return false;
+    public void printList (ArrayList<Integer> list){
+        
     }
 
 }
