@@ -1,7 +1,9 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Juan Andres Jaramillo P.
@@ -86,7 +88,32 @@ public class ProgramaP2V2 {
         boolean rta = false;
 
         //si ambos grafos no tienen en mismo numero de vertices retorna false:
-        
+        for (int i = 0; i < verLoc.length; i++) {
+            if(verLoc[i]==0)
+                continue;
+            if(verLoc[i]==1 || verLoc[i]==2)
+                return false;
+        }
+
+        //Si el numero de arboles en el bosque generado por la red Optica difiere del numero generado por la red Coaxial, retorna false
+        Set<Integer> bosque1= new HashSet<>(); //cambiar por un diccionario para facilitar la parte 3.
+        Set<Integer> bosque2= new HashSet<>();
+
+        for (int i = 0; i < verLoc.length; i++) {
+            if(verLoc[i]==0)
+                continue;
+            else{
+                bosque1.add(g1.find(i));
+                bosque2.add(g2.find(i));
+            }
+        }
+        if(bosque1.size() != bosque2.size()){
+            return false;
+        }
+
+        //recorre todos los arboles de cada red y revisa si existe redundancia:
+        return false;
+
     }
 
 
@@ -155,6 +182,7 @@ public class ProgramaP2V2 {
         public int [] getParents(){
             return parents;
         }
+
     }
     
 }
