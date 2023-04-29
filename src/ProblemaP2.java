@@ -1,9 +1,11 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class ProblemaP2 {
     
     /**
-     * funcion para inicializar la lista de adyacaencias
+     * funcion para inicializar la lista de adyacencias
      * @param vertices numero de computadores 
      * @return lista de adyacencias vacia
      */
@@ -27,18 +29,24 @@ public class ProblemaP2 {
      */
     public ArrayList<ArrayList<int[]>> agregarConexion (ArrayList<ArrayList<int[]>> adyacencias, int i, int j, int k){
         //agregar adyacencia para el eje i
-        int [] tuple= new int[2];
+        int [] tuple = new int[2];
+
         tuple[0]=j-1;
         tuple[1]=k;
-        ArrayList<int []> list=adyacencias.get(i-1);
-        list.add(tuple);
-        adyacencias.add(i-1, list);
+        adyacencias.get(i-1).add(tuple);
+
+        // ArrayList<int []> list=adyacencias.get(i-1);
+        // list.add(tuple);
+        // adyacencias.add(i-1, list);//ESTA LINEA ES PROBLEMATICA, LEER LO QUE HACE EL METODO ADD(INT INDEX, OBJECT)
 
         //agregar adyacencia para el eje j
         tuple[0]=i-1;
-        list= adyacencias.get(j-1);
-        list.add(tuple);
-        adyacencias.add(j-1, list);
+        adyacencias.get(j-1).add(tuple);
+
+        // list= adyacencias.get(j-1);
+        // list.add(tuple);
+        // adyacencias.add(j-1, list);//ESTA LINEA ES PROBLEMATICA, LEER LO QUE HACE EL METODO ADD(INT INDEX, OBJECT)
+
         return adyacencias;
     }
 
@@ -51,15 +59,14 @@ public class ProblemaP2 {
      * @return boolean 
      */
     public boolean hayCamino (ArrayList<ArrayList<int[]>> adyacencias, int a, int b,int k){
-        ArrayList<Integer> cola= new ArrayList<>();
+        Queue<Integer> cola= new LinkedList<>();
         ArrayList<Integer> result= new ArrayList<>();
-        //se debee arreglar la resta del 1 en la funcion principal
+        //se debe arreglar la resta del 1 en la funcion principal
         cola.add(a);
         int n=a;
         ArrayList <int []> list;
         while (cola.size()>0){
-            n=cola.get(0);
-            cola.remove(0);
+            n=cola.remove();
             result.add(n);
             list= adyacencias.get(n);
             for (int i=0; i<list.size();i++){
@@ -87,7 +94,7 @@ public class ProblemaP2 {
     public boolean esRedundantePorVertice (ArrayList<ArrayList<int[]>> adyacencias, int a, int b){
         boolean p1= hayCamino(adyacencias, a, b, 1);
         boolean p2= hayCamino(adyacencias, a, b, 2);
-        return ((p1 && p2)|(!p1 && !p2));
+        return ((p1 && p2)|(!p1 && !p2)); //para que esta operacion? si (p1 && p2) es true entonces ya se sabe que es redundante porque existe un camino por ambos cables...
     }
 
     public boolean esRedundante (ArrayList<ArrayList<int[]>> adyacencias){
