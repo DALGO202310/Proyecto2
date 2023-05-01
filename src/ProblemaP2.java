@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -25,7 +26,7 @@ public class ProblemaP2 {
                 int n= Integer.parseInt(especificacion[0]);
                 int m= Integer.parseInt(especificacion[1]);
                 ArrayList<ArrayList<int[]>> adyacencias= instancia.inicLista(n);
-                int [][] m= instancia.inicMatriz(n);
+                int [][] matriz= instancia.inicMatriz(n);
                 ArrayList<Integer> rta= new ArrayList<>();
                 line=br.readLine();
                 for (int j=0; j<=m ;j++){
@@ -34,7 +35,7 @@ public class ProblemaP2 {
                     int v2= Integer.parseInt(conexion[1])-1;
                     int k= Integer.parseInt(conexion[3]);
                     adyacencias= instancia.agregarConexion(adyacencias, v1, v2, k);
-                    rta.add(instancia.esRedundante(adyacencias, m));
+                    rta.add(instancia.esRedundante(adyacencias, matriz));
                 }
                 instancia.printList(rta);
             }
@@ -69,16 +70,17 @@ public class ProblemaP2 {
      * @return matriz inicializada
      */
     public int[][] inicMatriz (int vertices){
-        new int[][] m= new int [vertices][vertices];
+        int[][] m= new int [vertices][vertices];
         for (int i=0;i<=vertices;i++){
             for (int j=0; j<=vertices;j++){
-                if (i==j){
+                /*if (i==j){
                     m[i][j]=null;
-                }else{
+                }else{*/
                     m[i][j]=2;
-                }
+                //}
             }
         }
+        return m;
     }
 
     /**
@@ -150,9 +152,9 @@ public class ProblemaP2 {
         boolean p1= hayCamino(adyacencias, a, b, 1);
         boolean p2= hayCamino(adyacencias, a, b, 2);
         if (p1 && p2){
-            return 1
+            return 1;
         }else if (!p1 && !p2){
-            return 2
+            return 2;
         }else{
             return 0;
         }
@@ -164,19 +166,21 @@ public class ProblemaP2 {
      * @param m matriz que indica el tipo de redundancia
      * @return boolean 
      */
-    public boolean esRedundante (ArrayList<ArrayList<int[]>> adyacencias, int [][] m){
+    public int esRedundante (ArrayList<ArrayList<int[]>> adyacencias, int [][] m){
         for (int i=0; i<adyacencias.size();i++){
             for (int j=0; j<adyacencias.size();j++){
                 if (m[i][j]!=1 && i!=j){
                     int c= esRedundantePorVertice(adyacencias, i, j);
                     m[i][j]=c;
                     if (c==0){
-                        return false;
+                        //return false;
+                        return 0;
                     }
                 }
             }
         }
-        return true;
+        //return true;
+        return 1;
     }
 
     public void printList (ArrayList<Integer> list){
