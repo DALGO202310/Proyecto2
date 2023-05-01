@@ -1,17 +1,20 @@
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Random;
 
 public class GeneradorPruebas {
 
     /**
      * Genera pruebas aleatorias con las caracteristicas dadas
+     * PARA UTILIZAR EL PROGRAMA:
+     * MODIFICAR LAS VARIABLES: {@code casos}, {@code vertices}  y {@code conexiones} con los valores deseados.
      * @param args
      */
     public static void main(String[] args) throws Exception {
 
-        int casos = 5;
-        int vertices = 1000;
-        int conexiones = 1000;
+        int casos = 1;
+        int vertices = 2;
+        int conexiones = 3;
         System.out.println(casos);
         System.out.println(vertices + " " + conexiones);
 
@@ -19,12 +22,13 @@ public class GeneradorPruebas {
         int v1, v2, k;
 
         //inicializa la tabla
-        v1 = (int) Math.random()*(vertices+1);
-        v2 = (int) Math.random()*(vertices+1);
-        k = (int) Math.random()*(3);
+        Random rand = new Random();
+        v1 = 1 + rand.nextInt(vertices);
+        v2 = 1 + rand.nextInt(vertices);
+        k = rand.nextInt(3);
 
         while(v1==v2){ //un computador no puede estar conectado consigo mismo.
-            v2 = (int) Math.random()*(vertices+1);
+            v2 =  1 + rand.nextInt(vertices);
         }
 
         int [] tuple = new int[2];
@@ -39,14 +43,14 @@ public class GeneradorPruebas {
         //Agrega el resto de conexiones:
         ArrayList<int[]> adj;
         int i =0;
-        while(i < (conexiones-1)) {
+        while(i < conexiones) {
             
-            v1 = (int) Math.random()*(vertices+1);
-            v2 = (int) Math.random()*(vertices+1);
-            k = (int) Math.random()*(3);
+            v1 = 1 + rand.nextInt(vertices);
+            v2 = 1 + rand.nextInt(vertices);
+            k = 1 + rand.nextInt(3);
 
             while(v1==v2){ //un computador no puede estar conectado consigo mismo.
-                v2 = (int) Math.random()*(vertices+1);
+                v2 = 1 + rand.nextInt(vertices);
             }
 
             adj = conn.get(v1);
