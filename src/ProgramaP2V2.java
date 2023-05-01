@@ -1,8 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.Hashtable;
 import java.util.Set;
 
 /**
@@ -47,15 +46,23 @@ public class ProgramaP2V2 {
                 
                 for (int j = 0; j < connections; j++) {
                     String [] sTuple = br.readLine().split(" ");
-                    int [] tuple = new int[3];
+                    int[] tuple = new int[3];
                     for (int k = 0; k < 3; k++) {
-                        tuple[k] = Integer.parseInt(sTuple[k]);
+                        if(k==0 || k==1)
+                            tuple[k] = Integer.parseInt(sTuple[k])-1;
+                        else
+                            tuple[k] = Integer.parseInt(sTuple[k]);
                     }
-                    //ejecutar el programa.
+                    ampliarRed(tuple);
                 }
+                System.out.print("\n");
 			}
             br.close();
-		}
+		}catch(Exception e){
+            System.out.println("Ocurrio un problema durante la lectura de la informacion:\n" +
+            "-----------------------------------\n");
+            e.printStackTrace();
+        }
 	}
 
     //-------------------------------------------------------------------------------------------
@@ -63,7 +70,7 @@ public class ProgramaP2V2 {
     //-------------------------------------------------------------------------------------------
     
 
-    public void ampliarRed(int[] conexion){
+    public static void ampliarRed(int[] conexion){
 
         
         if(conexion[2]==1){//si la conexion es con cable optico:
@@ -81,11 +88,17 @@ public class ProgramaP2V2 {
             }
         }
 
+        //Revisa si hay redundancia:
+        boolean testRed = testRedundandy();
+        if (testRed) {
+            System.out.print("1 ");
+        } else{
+            System.out.print("0 ");
+        }
+
     }
 
-    public boolean testRedundandy(){
-
-        boolean rta = false;
+    public static boolean testRedundandy(){
 
         //si ambos grafos no tienen en mismo numero de vertices retorna false:
         for (int i = 0; i < verLoc.length; i++) {
@@ -96,15 +109,30 @@ public class ProgramaP2V2 {
         }
 
         //Si el numero de arboles en el bosque generado por la red Optica difiere del numero generado por la red Coaxial, retorna false
-        Set<Integer> bosque1= new HashSet<>(); //cambiar por un diccionario para facilitar la parte 3.
-        Set<Integer> bosque2= new HashSet<>();
+        Hashtable<Integer,ArrayList<Integer>> bosque1= new Hashtable<>();
+        Hashtable<Integer,ArrayList<Integer>> bosque2= new Hashtable<>();
 
         for (int i = 0; i < verLoc.length; i++) {
             if(verLoc[i]==0)
                 continue;
             else{
-                bosque1.add(g1.find(i));
-                bosque2.add(g2.find(i));
+                int clase1 = g1.find(i);
+                int clase2 =  g2.find(i);
+
+                if(bosque1.containsKey(clase1)){
+                    bosque1.get(clase1).add(i);
+                }else{
+                    bosque1.put(clase1, new ArrayList<Integer>());
+                    bosque1.get(clase1).add(i);
+                }
+
+                if(bosque2.containsKey(clase2)){
+                    bosque2.get(clase2).add(i);
+                }else{
+                    bosque2.put(clase2, new ArrayList<Integer>());
+                    bosque2.get(clase2).add(i);
+                }
+
             }
         }
         if(bosque1.size() != bosque2.size()){
@@ -112,7 +140,20 @@ public class ProgramaP2V2 {
         }
 
         //recorre todos los arboles de cada red y revisa si existe redundancia:
-        return false;
+        Set<Integer> keyset = bosque1.keySet();     
+        ArrayList<Integer> cc;
+        for (Integer key : keyset) {
+         cc = bosque1.get(key);
+         int set = g2.find(cc.get(0)); // Clase en el grafo 2 (coaxial) a la que pertenece el vertice.
+         for (int i = 1; i < cc.size(); i++) {
+            int v = cc.get(i);
+            if(g2.find(v)!=set){ // los vertices que pertenecen a un cc del grafo 1 (optico) tienen que pertenecer tambien a un componente conectado en el grafo 2 (coaxial)
+                return false;    // de lo contrario la red no seria redundante porque hay una conexion entre 2 vertices por optico que no existe por coaxial (o vice-versa). 
+            }
+         }
+        }
+
+        return true;
 
     }
 
@@ -176,11 +217,6 @@ public class ProgramaP2V2 {
                 parents[s1]=s2;
             if(alturaEstimada[s1]==alturaEstimada[s2])
                 alturaEstimada[s2]++;
-        }
-
-
-        public int [] getParents(){
-            return parents;
         }
 
     }
