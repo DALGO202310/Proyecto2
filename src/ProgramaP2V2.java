@@ -12,12 +12,29 @@ import java.util.Set;
 
 public class ProgramaP2V2 {
 
-    
-    private static  Particion g1;
+    /**
+     * Instancia de Particion que guarda el bosque construido por la red de cable optico.
+     */
+    private static Particion g1;
 
+    /**
+     * Instancia de Particion que guarda el bosque construido por la red de cable coaxial.
+     */
     private static Particion g2;
 
+    /**
+     * Array que guarda la ubicacion de cada computador a nivel global.
+     * 0: si no ha sido conectado con ningun cable
+     * 1: si tiene alguna conexion por cable optico
+     * 2: si tiene alguna conexion por cable coaxial
+     * 3: si tiene conexion por cable optico y coaxial
+     */
     private static int[] verLoc; 
+
+
+    //-------------------------------------------------------------------------------------------
+    // METODOS:
+    //-------------------------------------------------------------------------------------------
 
     /**
      * Metodo principal del programa.
@@ -59,17 +76,17 @@ public class ProgramaP2V2 {
 			}
             br.close();
 		}catch(Exception e){
-            System.out.println("Ocurrio un problema durante la lectura de la informacion:\n" +
-            "-----------------------------------\n");
+            System.out.println("ERROR: Ocurrio un problema durante la lectura de la informacion\n");
             e.printStackTrace();
         }
 	}
 
-    //-------------------------------------------------------------------------------------------
-    // PROGRAMA PRINCIPAL:
-    //-------------------------------------------------------------------------------------------
-    
 
+    /**
+     * Recibe una nueva conexion y la agrega a la red de computadores. 
+     * @param conexion la nueva conexion a agregar.
+     * Se supone que la conexion es nueva y que no existen conexiones de un computador consigo mismo (self-loops).
+     */
     public static void ampliarRed(int[] conexion){
 
         
@@ -98,9 +115,13 @@ public class ProgramaP2V2 {
 
     }
 
+    /**
+     * Metodo encargado de revisar si hay redundancia en la red de computadores
+     * @return {@code True} si hay redundancia y {@code False} de lo contrario. 
+     */
     public static boolean testRedundandy(){
 
-        //si ambos grafos no tienen en mismo numero de vertices retorna false:
+        //si ambos grafos no tienen el mismo numero de vertices retorna false:
         for (int i = 0; i < verLoc.length; i++) {
             if(verLoc[i]==0)
                 continue;
@@ -143,14 +164,14 @@ public class ProgramaP2V2 {
         Set<Integer> keyset = bosque1.keySet();     
         ArrayList<Integer> cc;
         for (Integer key : keyset) {
-         cc = bosque1.get(key);
-         int set = g2.find(cc.get(0)); // Clase en el grafo 2 (coaxial) a la que pertenece el vertice.
-         for (int i = 1; i < cc.size(); i++) {
-            int v = cc.get(i);
-            if(g2.find(v)!=set){ // los vertices que pertenecen a un cc del grafo 1 (optico) tienen que pertenecer tambien a un componente conectado en el grafo 2 (coaxial)
-                return false;    // de lo contrario la red no seria redundante porque hay una conexion entre 2 vertices por optico que no existe por coaxial (o vice-versa). 
+            cc = bosque1.get(key);
+            int set = g2.find(cc.get(0)); // Clase en el grafo 2 (coaxial) a la que pertenece el vertice.
+            for (int i = 1; i < cc.size(); i++) {
+                int v = cc.get(i);
+                if(g2.find(v)!=set){ // los vertices que pertenecen a un cc del grafo 1 (optico) tienen que pertenecer tambien a un componente conectado en el grafo 2 (coaxial)
+                    return false;    // de lo contrario la red no seria redundante porque hay una conexion entre 2 vertices por optico que no existe por coaxial (o vice-versa). 
+                }
             }
-         }
         }
 
         return true;
@@ -161,14 +182,23 @@ public class ProgramaP2V2 {
     //-------------------------------------------------------------------------------------------
     // CLASE INTERNA DESARROLLADA PARA MAPEAR EL BOSQUE GENERADO POR CADA RED: 
     //-------------------------------------------------------------------------------------------
+
     public static class Particion {
 
+        /**
+         * Arreglo con la informacion del arbol al que pertenece cada vertice.
+         */
         private int[] parents;
+
+        /**
+         * Arreglo utilizado para mejorar la eficiencia del metodo {@code union}.
+         */
         private int[] alturaEstimada;
     
         /**
          * Constructor
          * Asigna cada vertice del grafo a un subset y actualiza la altura estimada de cada vertice a 1.
+         * @param n numero de vertices que tiene el grafo.
          */
         public Particion(int n){
             parents = new int[n];
@@ -182,7 +212,7 @@ public class ProgramaP2V2 {
         /**
          * Encuentra el representante del subset al que pertenece el vertice v
          * @param v el vertice del cual se quiere encontrar el padre (representante del subset al que pertenece).
-         * @return el vertice padre del vertice {@code v} ingresado por parametro .
+         * @return el vertice padre del vertice {@code v} ingresado por parametro.
          */
         public int find(int v){
             if(parents[v]==v) return v;
