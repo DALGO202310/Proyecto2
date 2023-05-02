@@ -54,7 +54,6 @@ public class GeneradorPruebas {
         //----------------------------------Inicia Generacion de datos de prueba:
 
         PrintStream o = new PrintStream(new File(fileName));
-        PrintStream console = System.out;
         System.setOut(o); //redirige la salida a un archivo con el nonbre dado.
         
         System.out.println(casos);
