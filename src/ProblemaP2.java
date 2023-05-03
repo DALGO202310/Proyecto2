@@ -33,7 +33,7 @@ public class ProblemaP2 {
                     String [] conexion=line.split(" ");
                     int v1= Integer.parseInt(conexion[0])-1;
                     int v2= Integer.parseInt(conexion[1])-1;
-                    int k= Integer.parseInt(conexion[3]);
+                    int k= Integer.parseInt(conexion[2]); //3
                     adyacencias= instancia.agregarConexion(adyacencias, v1, v2, k);
                     rta.add(instancia.esRedundante(adyacencias, matriz));
                 }
@@ -71,8 +71,8 @@ public class ProblemaP2 {
      */
     public int[][] inicMatriz (int vertices){
         int[][] m= new int [vertices][vertices];
-        for (int i=0;i<=vertices;i++){
-            for (int j=0; j<=vertices;j++){
+        for (int i=0;i<vertices;i++){ //<=
+            for (int j=0; j<vertices;j++){ //<=
                 /*if (i==j){
                     m[i][j]=null;
                 }else{*/
