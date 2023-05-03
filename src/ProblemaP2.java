@@ -185,7 +185,7 @@ public class ProblemaP2 {
 
     public void printList (ArrayList<Integer> list){
         for (int i=0; i<list.size();i++){
-            if (i=0){
+            if (i==0){
                 System.out.println(list.get(i));
             }else{
                 System.out.println(" "+list.get(i));
