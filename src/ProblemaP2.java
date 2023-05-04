@@ -27,17 +27,19 @@ public class ProblemaP2 {
                 int m= Integer.parseInt(especificacion[1]);
                 ArrayList<ArrayList<int[]>> adyacencias= instancia.inicLista(n);
                 int [][] matriz= instancia.inicMatriz(n);
-                ArrayList<Integer> rta= new ArrayList<>();
+                int[] rta= new int[m];
                 line=br.readLine();
-                for (int j=0; j<=m ;j++){
+                for (int j=0; j<m ;j++){
                     String [] conexion=line.split(" ");
                     int v1= Integer.parseInt(conexion[0])-1;
                     int v2= Integer.parseInt(conexion[1])-1;
-                    int k= Integer.parseInt(conexion[2]); //3
+                    int k= Integer.parseInt(conexion[2]);
                     adyacencias= instancia.agregarConexion(adyacencias, v1, v2, k);
-                    rta.add(instancia.esRedundante(adyacencias, matriz));
+                    rta[j] = instancia.esRedundante(adyacencias, matriz);
+                    line = br.readLine();
                 }
                 instancia.printList(rta);
+                System.out.print("\n");
             }
         }
     }
@@ -53,7 +55,7 @@ public class ProblemaP2 {
     public ArrayList<ArrayList<int[]>> inicLista (int vertices){
         ArrayList<ArrayList<int []>> adyacencias= new ArrayList<>();
         ArrayList<int[]> list;
-        for (int i=0; i<=vertices; i++){
+        for (int i=0; i<vertices; i++){
             list= new ArrayList<>();
             adyacencias.add(list);
         }
@@ -71,13 +73,9 @@ public class ProblemaP2 {
      */
     public int[][] inicMatriz (int vertices){
         int[][] m= new int [vertices][vertices];
-        for (int i=0;i<vertices;i++){ //<=
-            for (int j=0; j<vertices;j++){ //<=
-                /*if (i==j){
-                    m[i][j]=null;
-                }else{*/
-                    m[i][j]=2;
-                //}
+        for (int i=0;i < vertices;i++){
+            for (int j=0; j < vertices;j++){
+                m[i][j]=2;
             }
         }
         return m;
@@ -96,11 +94,13 @@ public class ProblemaP2 {
         int [] tuple = new int[2];
         tuple[0]=j;
         tuple[1]=k;
-        adyacencias.get(i).add(i, tuple);
+        adyacencias.get(i).add(tuple);
 
         //agregar adyacencia para el eje j
+        tuple = new int[2];
         tuple[0]=i;
-        adyacencias.get(j).add(j, tuple);
+        tuple[1]=k;
+        adyacencias.get(j).add(tuple);
 
         return adyacencias;
     }
@@ -115,17 +115,17 @@ public class ProblemaP2 {
      */
     public boolean hayCamino (ArrayList<ArrayList<int[]>> adyacencias, int a, int b,int k){
         Queue<Integer> cola= new LinkedList<>();
-        ArrayList<Integer> result= new ArrayList<>();
+        boolean[] marcado = new boolean[adyacencias.size()];
         cola.add(a);
         int n=a;
         ArrayList <int []> list;
         while (cola.size()>0){
             n=cola.remove();
-            result.add(n);
+            marcado[n] = true;
             list= adyacencias.get(n);
             for (int i=0; i<list.size();i++){
                 int[] v= list.get(i);
-                if (!cola.contains(v[0]) && !result.contains(v[0]) && v[1]==k){
+                if (!cola.contains(v[0]) && !marcado[v[0]] && v[1]==k){
                     cola.add(v[0]);
                     if (v[0]==b){
                         return true;
@@ -183,13 +183,9 @@ public class ProblemaP2 {
         return 1;
     }
 
-    public void printList (ArrayList<Integer> list){
-        for (int i=0; i<list.size();i++){
-            if (i==0){
-                System.out.println(list.get(i));
-            }else{
-                System.out.println(" "+list.get(i));
-            }
+    public void printList (int[] list){
+        for (int i=0; i<list.length;i++){
+            System.out.print(list[i] + " ");
         }
     }
 

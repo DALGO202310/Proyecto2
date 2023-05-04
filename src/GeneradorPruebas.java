@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Random;
 
+/**
+ * @author Juan Andres Jaramillo P.
+ * @author Daniela Camacho.
+ * @author Yann Chové.
+ */
 public class GeneradorPruebas {
 
     /**
