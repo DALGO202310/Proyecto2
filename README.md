@@ -1,8 +1,8 @@
 ## Integrantes
 
 1. Juan Andres Jaramillo P. Codigo: 201821305
-2. Daniela Camacho. Código:
-3. Yann Chové. Código:
+2. Daniela Camacho. Código: 202110974
+3. Yann Chové. Código: 202316916
 
 ## Instrucciones de uso:
  
