@@ -69,7 +69,10 @@ public class ProblemaP2 {
                         else
                             tuple[k] = Integer.parseInt(sTuple[k]);
                     }
-                    ampliarRed(tuple);
+                    if(j == (connections-1))
+                        ampliarRed(tuple, true);
+                    else
+                        ampliarRed(tuple, false);
                 }
                 System.out.print("\n");
 			}
@@ -88,7 +91,7 @@ public class ProblemaP2 {
      * 
      * Complejidad: O(v).
      */
-    public static void ampliarRed(int[] conexion){
+    public static void ampliarRed(int[] conexion, boolean ultima){
 
         
         if(conexion[2]==1){//si la conexion es con cable optico:
@@ -111,9 +114,13 @@ public class ProblemaP2 {
         //Revisa si hay redundancia:
         // O(v)
         boolean testRed = testRedundandy();
-        if (testRed) {
+        if (testRed && ultima) {
+            System.out.print("1");
+        } else if (testRed && !ultima){
             System.out.print("1 ");
-        } else{
+        }else if(!testRed && ultima){
+            System.out.print("0");
+        }else{
             System.out.print("0 ");
         }
 
